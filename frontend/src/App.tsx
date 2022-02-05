@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import _ from 'lodash/fp';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import shortid from 'shortid';
 
 import './App.css';
-import { LearningPage } from './containers/LearningPage/LearningPage';
+import { FlashcardsListCreatePage } from './containers/FlashcardsListCreatePage/ListCreatePage';
 import { FlashcardsListPage } from './containers/FlashcardsListPage/FlashcardsListPage';
+import { LearningPage } from './containers/LearningPage/LearningPage';
+import { OAuthPage } from './containers/OAuthContainer/OAuthContainer';
 import flashcardsData from './data/words.json';
 import { FlashcardsList } from './types/Flashcard.interface';
 
@@ -56,12 +57,15 @@ function App() {
         updateStorage(flashcardsLists);
     }, [flashcardsLists]);
 
-    console.log(flashcardsLists);
+    // console.log(flashcard?WsLists);
 
     return (
         <BrowserRouter>
             <Routes>
                 <Route path="/learning/:id" element={<LearningPage />} />
+                <Route path="/auth" element={<OAuthPage />} />
+                <Route path="/flashcards-lists/create" element={<FlashcardsListCreatePage />} />
+
                 <Route
                     path="/flashcards-lists"
                     element={

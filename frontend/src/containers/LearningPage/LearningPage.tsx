@@ -1,19 +1,13 @@
-import React, { useState } from 'react';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Button from '@mui/material/Button';
 
-import flashcardsData from '../../data/words.json';
 import { FlashcardComponent, useStyles } from '../../components/Flashcard/Flashcard';
-
-// const getData = () => {
-//     const flashcardsStorage = localStorage.get('flashcards');
-
-//     return flashcardsStorage || flashcardsData;
-// };
+import flashcardsData from '../../data/words.json';
 
 const flashcardsList = flashcardsData.map((data, index) => ({
     id: index,

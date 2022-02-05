@@ -1,16 +1,16 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app/app.module';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { TransientLoggerService } from './logging/transient-logger.service';
-import { ConfigService } from '@nestjs/config';
-import { Config } from './config/config.model';
-import { configFactory } from './config/config.factory';
-import * as helmet from 'helmet';
-import * as cookieParser from 'cookie-parser';
-import * as csurf from 'csurf';
-import * as rateLimit from 'express-rate-limit';
-import { NestExpressApplication } from '@nestjs/platform-express';
 import { ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as cookieParser from 'cookie-parser';
+import * as rateLimit from 'express-rate-limit';
+import * as helmet from 'helmet';
+
+import { AppModule } from './app/app.module';
+import { configFactory } from './config/config.factory';
+import { Config } from './config/config.model';
+import { TransientLoggerService } from './logging/transient-logger.service';
 
 declare const module: any;
 
@@ -31,10 +31,11 @@ async function bootstrap() {
 
     const app = await NestFactory.create<NestExpressApplication>(AppModule, {
         logger,
-        cors: true,
+        // cors: true,
         // TODO: Add https stuff
         //httpsOptions: {},
     });
+    app.enableCors();
 
     app.enableShutdownHooks();
 

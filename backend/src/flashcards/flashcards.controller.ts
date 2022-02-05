@@ -13,7 +13,7 @@ export class FlashcardsController {
     }
 
     @Get(':id')
-    public async getForFlashcardList(@Param('id') id) {
+    public async getForFlashcardList(@Param('id') id: number) {
         return await this.flashcardsService.getForFlashcardList(id);
     }
 
