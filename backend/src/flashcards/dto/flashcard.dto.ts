@@ -1,21 +1,18 @@
-import { IsNumber, IsNotEmpty, IsMilitaryTime, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateFlashcardDto {
     @IsNotEmpty()
     @IsString()
-    name: string;
+    word: string;
 
     @IsNotEmpty()
     @IsString()
-    description: string;
+    translation: string;
 
-    @IsMilitaryTime()
-    reservationAvailabilityStart: string;
-
-    @IsMilitaryTime()
-    reservationAvailabilityEnd: string;
+    @IsNotEmpty()
+    @IsNumber()
+    flashcardList: number;
 }
-
 export class FlashcardDto extends CreateFlashcardDto {
     id: number;
 }

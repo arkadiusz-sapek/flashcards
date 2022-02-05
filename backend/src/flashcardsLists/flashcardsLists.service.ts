@@ -20,6 +20,10 @@ export class FlashcardsListsService {
         return await this.repo.find({ where: { user: userId } });
     }
 
+    public async getById(id: number) {
+        return await this.repo.findOne({ where: { id } });
+    }
+
     public async create(flashcardsList: CreateFlashcardsListDto, userId: number) {
         const newFlashcardsList = this.repo.create(
             this.transformCreateFlashcardsListToModel(flashcardsList, userId),
