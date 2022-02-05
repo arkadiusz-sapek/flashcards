@@ -1,0 +1,14 @@
+version: 0.0
+os: linux
+files:
+  - source: .
+    destination: /home/ec2-user/reservations-app/
+hooks:
+  AfterInstall:
+    - location: setup.sh
+      timeout: 7200
+      runas: root
+  ApplicationStart:
+    - location: run.sh
+      timeout: 7200
+      runas: root

@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  # backend:
+  #   container_name: reservations-app-backend-dev
+  #   build:
+  #     dockerfile: ./devtools/dockerfiles/backend/Dockerfile.dev
+  #     context: .
+  #   environment:
+  #     DATABASE_URL: postgres://user:password@postgres:5432/db
+  #     NODE_ENV: development
+  #     PORT: 3000
+  #   command: ["yarn", "start"]
+  #   depends_on:
+  #     - postgres
+  #   ports:
+  #     - "8080:8080"
+
+  postgres:
+    image: postgres:12.0-alpine
+    ports:
+      - "5432:5432"
+
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=db
