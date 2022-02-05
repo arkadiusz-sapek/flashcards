@@ -1,21 +1,21 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { TransientLoggerModule } from '../logging/transient-logger.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { configFactory } from '../config/config.factory';
-import { AuthModule } from '../auth/auth.module';
-import { UsersModule } from '../users/users.module';
-import { HealthModule } from '../health/health.module';
-import { Config } from '../config/config.model';
-import { TransientLoggerService } from '../logging/transient-logger.service';
-import { CompaniesModule } from 'src/companies/companies.module';
-import { ReservationsModule } from 'src/reservations/reservations.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { join } from 'path';
+
 import { FlashcardModule } from 'src/flashcards/flashcards.module';
 import { FlashcardsListsModule } from 'src/flashcardsLists/flashcardsLists.module';
+
+import { AuthModule } from '../auth/auth.module';
+import { configFactory } from '../config/config.factory';
+import { Config } from '../config/config.model';
+import { HealthModule } from '../health/health.module';
+import { TransientLoggerModule } from '../logging/transient-logger.module';
+import { TransientLoggerService } from '../logging/transient-logger.service';
+import { UsersModule } from '../users/users.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
     imports: [
@@ -26,8 +26,6 @@ import { FlashcardsListsModule } from 'src/flashcardsLists/flashcardsLists.modul
         TransientLoggerModule,
         AuthModule,
         UsersModule,
-        // CompaniesModule,
-        // ReservationsModule,
         FlashcardModule,
         FlashcardsListsModule,
         TypeOrmModule.forRootAsync({

@@ -1,9 +1,4 @@
-import { IsEmail, IsEnum, MinLength, Matches } from 'class-validator';
-
-export enum UserRole {
-    Client = 'CLIENT',
-    Consultant = 'CONSULTANT',
-}
+import { IsEmail, Matches, MinLength } from 'class-validator';
 
 export class CreateUserDto {
     @IsEmail()
@@ -22,9 +17,6 @@ export class CreateUserDto {
         message: 'Password need to contain 1 number',
     })
     password: string;
-
-    @IsEnum(UserRole)
-    role: UserRole;
 }
 export class UserDto extends CreateUserDto {
     id: number;

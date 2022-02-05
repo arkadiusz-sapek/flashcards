@@ -1,16 +1,8 @@
-import {
-    Entity,
-    PrimaryGeneratedColumn,
-    Column,
-    OneToMany,
-    OneToOne,
-    CreateDateColumn,
-} from 'typeorm';
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
-import { Company } from 'src/companies/models/company.entity';
-import { Reservation } from 'src/reservations/models/reservation.entity';
-import { UserRole } from '../dto/user.dto';
 import { FlashcardList } from 'src/flashcardsLists/models/flashcardList.entity';
+
+
 
 @Entity()
 export class User {
@@ -25,15 +17,6 @@ export class User {
 
     @Column()
     password: string;
-
-    @Column()
-    role: UserRole;
-
-    // @OneToOne(
-    //     type => Company,
-    //     company => company.user,
-    // )
-    // company: Company;
 
     @OneToMany(
         type => FlashcardList,

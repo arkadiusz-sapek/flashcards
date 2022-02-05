@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { classToPlain, plainToClass } from 'class-transformer';
 import { Repository } from 'typeorm';
-import { plainToClass, classToPlain } from 'class-transformer';
 
-// import { C } from './dto/flashcard.dto';
+import { CreateFlashcardsListDto } from './dto/flashcardsList.dto';
 import { FlashcardList } from './models/flashcardList.entity';
 
 @Injectable()
@@ -16,22 +16,24 @@ export class FlashcardsListsService {
         return await this.repo.find();
     }
 
-    // public async getForClient(userId: number) {
-    //     return await this.companyRepo.findOne({ where: { user: userId } });
-    // }
+    public async getForUser(userId: number) {
+        return await this.repo.find({ where: { user: userId } });
+    }
 
-    // public async create(company: CreateCompanyDto, userId: number) {
-    //     const newCompany = this.companyRepo.create(
-    //         this.transformCreateCompanyToModel(company, userId),
-    //     );
-    //     await this.companyRepo.save(newCompany);
+    public async create(flashcardsList: CreateFlashcardsListDto, userId: number) {
+        const newFlashcardsList = this.repo.create(
+            this.transformCreateFlashcardsListToModel(flashcardsList, userId),
+        );
+        await this.repo.save(newFlashcardsList);
 
-    //     return newCompany;
-    // }
+        return newFlashcardsList;
+    }
+    private transformCreateFlashcardsListToModel(
+        flashcardDto: CreateFlashcardsListDto,
+        userId: number,
+    ): FlashcardList {
+        const data = classToPlain({ ...flashcardDto, user: userId });
 
-    // private transformCreateCompanyToModel(companyDto: CreateCompanyDto, userId: number): Company {
-    //     const data = classToPlain({ ...companyDto, user: userId });
-
-    //     return plainToClass(Company, data);
-    // }
+        return plainToClass(FlashcardList, data);
+    }
 }
