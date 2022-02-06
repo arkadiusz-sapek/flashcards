@@ -3,24 +3,30 @@ import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { FlashcardComponent, useStyles } from '../../components/Flashcard/Flashcard';
-import flashcardsData from '../../data/words.json';
-
-const flashcardsList = flashcardsData.map((data, index) => ({
-    id: index,
-    ...data,
-    isLearned: false,
-}));
+import { httpService } from '../../services/httpService';
+import { Flashcard } from '../../types/Flashcard.interface';
 
 export const LearningPage = () => {
     const { card } = useStyles();
     const navigate = useNavigate();
-    const [flashcards, setFlashcards] = useState(flashcardsList);
+    const { id } = useParams();
+    const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
 
-    const [currentFlashcard, setCurrentFlashcard] = useState(flashcardsList[0]);
+    const [currentFlashcard, setCurrentFlashcard] = useState<Flashcard | undefined>();
+
+    const loadFlashcardsList = async () => {
+        const result = await httpService.get(`/flashcards-lists/${id}`);
+        setFlashcards(result.data.flashcards);
+        setCurrentFlashcard(result.data.flashcards[0]);
+    };
+
+    useEffect(() => {
+        loadFlashcardsList();
+    }, []);
 
     const numberOfLearned = flashcards.filter(({ isLearned }) => isLearned).length;
 
@@ -28,8 +34,9 @@ export const LearningPage = () => {
         const unlearnedFlashcards = flashcards.filter(({ isLearned }) => !isLearned);
 
         const newCurrentFlashcard =
-            unlearnedFlashcards.find(({ id }) => id > currentFlashcard.id) ||
-            unlearnedFlashcards[0];
+            unlearnedFlashcards.find(
+                unlearnedFlashcard => unlearnedFlashcard.id > (currentFlashcard?.id || 0),
+            ) || unlearnedFlashcards[0];
 
         setCurrentFlashcard(newCurrentFlashcard);
     };
@@ -38,7 +45,7 @@ export const LearningPage = () => {
         setFlashcards([
             ...flashcards.map(flashcard => ({
                 ...flashcard,
-                isLearned: flashcard.id === currentFlashcard.id ? true : flashcard.isLearned,
+                isLearned: flashcard.id === currentFlashcard?.id ? true : flashcard.isLearned,
             })),
         ]);
         setNextCurrentFlashcard();
@@ -52,7 +59,7 @@ export const LearningPage = () => {
                 Back
             </Button>
             <Box padding={20}>
-                {numberOfLearned === flashcardsList.length ? (
+                {numberOfLearned === flashcards.length ? (
                     <>
                         <Card sx={{ minWidth: 275 }} className={card}>
                             <CardContent>
@@ -77,13 +84,17 @@ export const LearningPage = () => {
                         </Card>
                     </>
                 ) : (
-                    <FlashcardComponent
-                        flashcard={currentFlashcard}
-                        markAsLearned={markAsLearned}
-                        markAsUnlearnd={markAsUnlearnd}
-                        numberOfLearned={numberOfLearned}
-                        numberOfUnlearned={flashcards.length - numberOfLearned}
-                    />
+                    <>
+                        {currentFlashcard && (
+                            <FlashcardComponent
+                                flashcard={currentFlashcard}
+                                markAsLearned={markAsLearned}
+                                markAsUnlearnd={markAsUnlearnd}
+                                numberOfLearned={numberOfLearned}
+                                numberOfUnlearned={flashcards.length - numberOfLearned}
+                            />
+                        )}
+                    </>
                 )}
             </Box>
         </>

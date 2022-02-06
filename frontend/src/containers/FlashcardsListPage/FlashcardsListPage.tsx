@@ -1,15 +1,16 @@
-import * as React from 'react';
+import { makeStyles } from '@material-ui/core';
+import Button from '@mui/material/Button';
+import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core';
 
+import { httpService } from '../../services/httpService';
 import { FlashcardsList } from '../../types/Flashcard.interface';
 
 export const useStyles = makeStyles({
@@ -18,20 +19,21 @@ export const useStyles = makeStyles({
     },
 });
 
-interface Props {
-    flashcardsLists: FlashcardsList[];
-    createFlashCardsList: () => void;
-    editFlashCardsList: (list: FlashcardsList) => void;
-    removeFlashCardsList: (id: string) => void;
-}
-
-export const FlashcardsListPage = ({
-    flashcardsLists,
-    createFlashCardsList,
-    removeFlashCardsList,
-}: Props) => {
+export const FlashcardsListPage = () => {
+    const [flashcardsLists, setFlashcardsLists] = useState<FlashcardsList[]>([]);
     const navigate = useNavigate();
     const styles = useStyles();
+
+    const loadFlashcardsLists = async () => {
+        const newFlascahrdsLists = await httpService.get<any>('/flashcards-lists');
+
+        setFlashcardsLists(newFlascahrdsLists.data);
+    };
+
+    useEffect(() => {
+        loadFlashcardsLists();
+    }, []);
+
     return (
         <>
             <TableContainer component={Paper}>
@@ -46,7 +48,7 @@ export const FlashcardsListPage = ({
                     <TableBody>
                         {flashcardsLists.map(flashcardList => (
                             <TableRow
-                                key={flashcardList.name}
+                                key={flashcardList.id}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
                                 <TableCell
@@ -62,16 +64,14 @@ export const FlashcardsListPage = ({
                                 </TableCell>
                                 <TableCell align="right">
                                     <Button>Edit</Button>
-                                    <Button onClick={() => removeFlashCardsList(flashcardList.id)}>
-                                        Delete
-                                    </Button>
+                                    <Button onClick={() => console.log('remove')}>Delete</Button>
                                 </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
                 </Table>
             </TableContainer>
-            <Button size="small" onClick={() => createFlashCardsList()}>
+            <Button size="small" onClick={() => navigate('/flashcards-lists/create')}>
                 Add new list
             </Button>
         </>
