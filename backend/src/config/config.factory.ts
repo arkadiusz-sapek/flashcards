@@ -1,5 +1,5 @@
-import { Config } from './config.model';
 import { parseBoolean } from './config.helper';
+import { Config } from './config.model';
 
 export function configFactory(): Config {
     return {
@@ -43,11 +43,11 @@ export function configFactory(): Config {
         },
         db: {
             type: 'postgres',
-            host: 'localhost',
+            host: process.env.DB_HOST,
             port: 5432,
-            username: 'user',
-            password: 'password',
-            database: 'db',
+            username: process.env.DB_USERNAME,
+            password: process.env.DB_PASSWORD,
+            database: 'postgres',
             entities: [__dirname + '/**/*.entity{.ts,.js}'],
             synchronize: true,
         },
