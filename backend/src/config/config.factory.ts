@@ -43,13 +43,15 @@ export function configFactory(): Config {
         },
         db: {
             type: 'postgres',
-            host: 'postgres',
+            host: process.env.DB_HOST,
             port: 5432,
-            username: 'user',
-            password: 'password',
-            database: 'db',
+            username: process.env.DB_USERNAME,
+            password: process.env.DB_PASSWORD,
+            database: process.env.DB_DATABASE_NAME,
             entities: [__dirname + '/**/*.entity{.ts,.js}'],
             synchronize: true,
         },
     };
 }
+
+console.log(process.env.DB_HOST);
