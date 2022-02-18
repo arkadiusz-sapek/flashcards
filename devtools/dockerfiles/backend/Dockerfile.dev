@@ -1,7 +1,17 @@
 FROM node:alpine
+
+RUN mkdir /app
+
 WORKDIR /app
+
 COPY backend/package.json backend/yarn.lock ./
-RUN  yarn
-COPY . /app
+COPY backend/tsconfig.json backend/tsconfig.json ./
+COPY backend/tsconfig.build.json backend/tsconfig.build.json ./
 
+COPY backend/src /app/src
 
+RUN yarn install
+
+CMD [ "yarn", "start" ]
+
+EXPOSE 8080
