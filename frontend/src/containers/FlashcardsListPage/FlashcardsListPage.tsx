@@ -25,6 +25,7 @@ export const FlashcardsListPage = () => {
     const styles = useStyles();
 
     const loadFlashcardsLists = async () => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const newFlascahrdsLists = await httpService.get<any>('/flashcards-lists');
 
         setFlashcardsLists(newFlascahrdsLists.data);
@@ -64,7 +65,7 @@ export const FlashcardsListPage = () => {
                                 </TableCell>
                                 <TableCell align="right">
                                     <Button>Edit</Button>
-                                    <Button onClick={() => console.log('remove')}>Delete</Button>
+                                    {/* <Button onClick={() => console.log('remove')}>Delete</Button> */}
                                 </TableCell>
                             </TableRow>
                         ))}

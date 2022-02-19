@@ -3,9 +3,11 @@ name: Deploy to staging
 on:
   workflow_dispatch:
 
+env:
+  REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
+
 jobs:
-  deploy:
-    name: Build image
+  deploy-backend:
     runs-on: ubuntu-latest
 
     steps:
@@ -35,3 +37,34 @@ jobs:
           docker build -f devtools/dockerfiles/backend/Dockerfile.dev -t flashcards:latest .
           docker tag flashcards:latest 429572539595.dkr.ecr.eu-central-1.amazonaws.com/flashcards:latest
           docker push 429572539595.dkr.ecr.eu-central-1.amazonaws.com/flashcards:latest
+
+  deploy-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache modules
+        uses: actions/cache@v1
+        id: yarn-cache
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+      - name: Use Node.js 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: Install dependencies
+        working-directory: ./frontend
+        run: yarn
+      - name: Build
+        working-directory: ./frontend
+        run: yarn build
+      - name: Deploy
+        working-directory: ./frontend
+        run: aws s3 sync ./build s3://flashcards-frontend

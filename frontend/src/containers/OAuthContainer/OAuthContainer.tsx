@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Cookies from 'js-cookie';
 import React from 'react';
 import { GoogleLogin } from 'react-google-login';
@@ -18,7 +19,7 @@ export const OAuthPage = () => {
     };
     return (
         <>
-            <textarea onChange={val => console.log(val.target.value.replace(/\s+/g, '-'))} />
+            {/* <textarea onChange={val => console.log(val.target.value.replace(/\s+/g, '-'))} /> */}
 
             <GoogleLogin
                 clientId={
